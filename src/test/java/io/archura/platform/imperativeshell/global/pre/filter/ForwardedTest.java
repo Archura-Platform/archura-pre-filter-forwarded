@@ -1,8 +1,7 @@
-package io.archura.platform.global.pre.filter;
+package io.archura.platform.imperativeshell.global.pre.filter;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import io.archura.platform.context.Context;
-import io.archura.platform.logging.Logger;
+import io.archura.platform.api.context.Context;
+import io.archura.platform.api.logger.Logger;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -19,7 +18,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-import static io.archura.platform.global.pre.filter.Forwarded.FORWARDED_HEADER;
+import static io.archura.platform.imperativeshell.global.pre.filter.Forwarded.FORWARDED_HEADER;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
@@ -52,7 +51,6 @@ public class ForwardedTest {
     @Mock
     private Logger logger;
 
-    private final ObjectMapper objectMapper = new ObjectMapper();
     private final Map<String, Object> attributes = new HashMap<>();
 
     @BeforeEach

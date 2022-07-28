@@ -1,7 +1,7 @@
-package io.archura.platform.global.pre.filter;
+package io.archura.platform.imperativeshell.global.pre.filter;
 
-import io.archura.platform.context.Context;
-import io.archura.platform.logging.Logger;
+import io.archura.platform.api.context.Context;
+import io.archura.platform.api.logger.Logger;
 import org.springframework.web.servlet.function.ServerRequest;
 
 import java.net.InetAddress;
