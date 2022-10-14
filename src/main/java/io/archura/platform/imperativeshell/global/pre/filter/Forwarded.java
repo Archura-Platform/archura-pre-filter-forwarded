@@ -1,48 +1,46 @@
 package io.archura.platform.imperativeshell.global.pre.filter;
 
 import io.archura.platform.api.context.Context;
+import io.archura.platform.api.http.HttpServerRequest;
 import io.archura.platform.api.logger.Logger;
-import org.springframework.web.servlet.function.ServerRequest;
 
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
-import java.util.function.UnaryOperator;
+import java.util.function.Consumer;
 
-public class Forwarded implements UnaryOperator<ServerRequest> {
+import static java.util.Objects.nonNull;
+
+public class Forwarded implements Consumer<HttpServerRequest> {
 
     public static final String FORWARDED_HEADER = "Forwarded";
     private Logger logger;
 
     @Override
-    public ServerRequest apply(final ServerRequest request) {
-        final Map<String, Object> attributes = request.attributes();
+    public void accept(final HttpServerRequest request) {
+        final Map<String, Object> attributes = request.getAttributes();
         final Context context = (Context) attributes.get(Context.class.getSimpleName());
         logger = context.getLogger();
-        final Optional<InetSocketAddress> inetSocketAddressOptional = request.remoteAddress();
-        if (inetSocketAddressOptional.isPresent()) {
-            final InetSocketAddress inetSocketAddress = inetSocketAddressOptional.get();
+        InetSocketAddress inetSocketAddress = request.getRemoteAddress();
+        if (nonNull(inetSocketAddress)) {
             final InetAddress address = inetSocketAddress.getAddress();
             final String remoteAddress = address.getHostAddress();
-            final List<String> forwardedValues = new ArrayList<>(request.headers().header(FORWARDED_HEADER));
+            final List<String> forwardedValues = request.getRequestHeaders().get(FORWARDED_HEADER);
             forwardedValues.add(String.format("for=%s", remoteAddress));
             Collections.reverse(forwardedValues);
             final String forwardedValue = String.join(", ", forwardedValues);
+            buildRequestWithForwardedHeader(request, forwardedValue);
             logger.debug("RemoteAddress found in the request, will add Forwarded header: %s", forwardedValue);
-            return buildRequestWithForwardedHeader(request, forwardedValue);
         } else {
             logger.debug("No remoteAddress in the request found, will not add Forwarded header.");
-            return request;
         }
     }
 
-    ServerRequest buildRequestWithForwardedHeader(ServerRequest request, String forwardedValue) {
-        return ServerRequest.from(request)
-                .header(FORWARDED_HEADER, forwardedValue)
-                .build();
+    void buildRequestWithForwardedHeader(
+            final HttpServerRequest request, final String forwardedValue
+    ) {
+        request.getRequestHeaders().put(FORWARDED_HEADER, List.of(forwardedValue));
     }
 }

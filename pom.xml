@@ -12,17 +12,11 @@
         <java.version>17</java.version>
         <compiler.source>17</compiler.source>
         <compiler.target>17</compiler.target>
-        <archura-platform-api.version>0.0.1</archura-platform-api.version>
+        <archura-platform-api.version>0.0.4</archura-platform-api.version>
     </properties>
 
     <dependencies>
         <!-- PACK WITH -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-            <version>2.7.0</version>
-            <scope>provided</scope>
-        </dependency>
         <dependency>
             <groupId>io.archura</groupId>
             <artifactId>archura-platform-api</artifactId>
