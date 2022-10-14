@@ -23,7 +23,7 @@ public class Forwarded implements Consumer<HttpServerRequest> {
         final Map<String, Object> attributes = request.getAttributes();
         final Context context = (Context) attributes.get(Context.class.getSimpleName());
         logger = context.getLogger();
-        InetSocketAddress inetSocketAddress = request.getRemoteAddress();
+        final InetSocketAddress inetSocketAddress = request.getRemoteAddress();
         if (nonNull(inetSocketAddress)) {
             final InetAddress address = inetSocketAddress.getAddress();
             final String remoteAddress = address.getHostAddress();
